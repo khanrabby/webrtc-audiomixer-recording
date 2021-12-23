@@ -1,0 +1,25 @@
+<html>
+    <head></head>
+    
+    <body>
+         
+        <p>Hello this is testing</p>
+        <audio src="test_capture.mp3" crossorigin="anonymous"></audio>
+
+        <!-- <button data-playing="false" role="switch" aria-checked="false">
+            <span>Play/Pause</span>
+        </button> -->
+
+        <button id="startMediaRecord">Start Media Record</button>
+        <button id="stopMediaRecord">Stop Media Record</button>
+        
+        <a id="downloadButton" class="button">Download</a>
+
+        <span> Volume </span><input type="range" id="volume" min="0" max="2" value="1" step="0.01">
+
+        <span> Panner </span><input type="range" id="panner" min="-1" max="1" value="0" step="0.01">
+
+        <script src="recordMediaElement.js"></script> 
+    </body> 
+
+    </html>
