@@ -6,6 +6,7 @@
         <p>Hello this is testing</p>
         <audio src="test_capture.mp3" crossorigin="anonymous"></audio>
 
+        <h3>Audio file</h3>
         <!-- <button data-playing="false" role="switch" aria-checked="false">
             <span>Play/Pause</span>
         </button> -->
@@ -13,13 +14,18 @@
         <button id="startMediaRecord">Start Media Record</button>
         <button id="stopMediaRecord">Stop Media Record</button>
         
-        <a id="downloadButton" class="button">Download</a>
+        <h3>Microphone</h3>
+        <button id="startMicRecord">Start Mic Record</button>
+        <button id="stopMicRecord">Stop Mic Record</button>
+        
+        <h3><a id="downloadButton" class="button">Download</a></h3>
 
-        <span> Volume </span><input type="range" id="volume" min="0" max="2" value="1" step="0.01">
+        <h3> Volume </h3><input type="range" id="volume" min="0" max="2" value="1" step="0.01">
 
-        <span> Panner </span><input type="range" id="panner" min="-1" max="1" value="0" step="0.01">
+        <h3> Panner </h3><input type="range" id="panner" min="-1" max="1" value="0" step="0.01">
 
-        <script src="recordMediaElement.js"></script> 
+        <script src="mergeAudio.js"></script> 
+        <!-- <script src="recordMicSound.js"></script>  -->
     </body> 
 
     </html>
