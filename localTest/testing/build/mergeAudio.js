@@ -8,6 +8,10 @@ const stopAudioFileRecord = document.querySelector('#stopMediaRecord');
 const startMicRecord = document.querySelector('#startMicRecord');
 const stopMicRecord = document.querySelector('#stopMicRecord');
 
+/** start & stop button for recording */
+const startRecord = document.querySelector('#startRecord');
+const stopRecord = document.querySelector('#stopRecord');
+
 let audioFileStream = null;
 
 let micStream = null;
@@ -21,40 +25,45 @@ let mediaRecorder = null;
 
 let streamToRecord = null;
 
+const getAudioContext = ()=>{
+    if(audioContext == null) {
+        audioContext = new AudioContext();
+    }
+    return audioContext;
+}
+
+const getDestinationStream = () =>{
+    if(streamToRecord == null){
+        streamToRecord = getAudioContext().createMediaStreamDestination();
+    }
+    return streamToRecord;
+}
+
 startAudioFileRecord.addEventListener('click',async (event)=>{
 
-    audioContext = new AudioContext();
+    const context = getAudioContext();
     audioFileStream = audioElement.captureStream(); // get the audio file stream
 
-    console.log('audio file stream track = ', audioFileStream.getAudioTracks().length)
-
-    const audioStreamSource = audioContext.createMediaStreamSource(audioFileStream);
-    if(streamToRecord == null){
-        streamToRecord = audioContext.createMediaStreamDestination();
-    }
-    
-
-    console.log('create Media Stream Source = ',audioStreamSource );
+    const audioStreamSource = context.createMediaStreamSource(audioFileStream);
+    const destinationStream = getDestinationStream();
 
     const audioGain = audioContext.createGain();
     audioGain.gain.value = 0.7;
-    // connect(audioGain)
-    
-    audioStreamSource.connect(audioGain).connect(streamToRecord);
+    audioStreamSource.connect(audioGain).connect(destinationStream);
 
-    console.log('stream to record = ', streamToRecord);
 
-    //let tracks= streamToRecord.stream.getAudioTracks();
-    //startRecording(new MediaStream(tracks));
-
-    startRecording(streamToRecord.stream);
+    //startRecording(destinationStream.stream);
     
     audioElement.play();
 })
 
 stopAudioFileRecord.addEventListener('click',(event)=>{
     audioElement.pause();
-    mediaRecorder.stop();
+    if(audioFileStream != null){
+        audioFileStream.getTracks().forEach(track => track.stop());
+    }
+
+    
 })
 
 startMicRecord.addEventListener('click',(event)=>{
@@ -63,24 +72,38 @@ startMicRecord.addEventListener('click',(event)=>{
         audio: true
       })
       .then(async(stream)=>{
-        micStream = audioContext.createMediaStreamSource(stream);
-        const micGain = audioContext.createGain();
+        /** get audio context, if not exist get a new one  */
+        const context = getAudioContext();
+
+        micStream = context.createMediaStreamSource(stream); /** create source audio context stream  */
+        const destinationStream = getDestinationStream(); /** get destination audio context stream, if not exist get a new one  */
+        
+        const micGain = context.createGain();
         micGain.gain.value = 1.7;
-        micStream.connect(micGain).connect(streamToRecord);
+        micStream.connect(micGain).connect(destinationStream);
       })
       .catch(async(error)=>{
           console.log('error happened when trying to get microphone, error = ', error.toString());
       })
 })
 
+stopMicRecord.addEventListener('click',(event)=>{
+    if(micStream != null){
+        micStream.mediaStream.getTracks().forEach(track => track.stop());
+    }
+})
+
+startRecord.addEventListener('click',(event)=>{
+    const destinationStream = getDestinationStream();
+    console.log('inside start record = ', destinationStream);
+    startRecording(destinationStream.stream);
+})
+
+stopRecord.addEventListener('click',(event)=>{
+    mediaRecorder.stop();
+})
 
 const startRecording = async (stream) => {
-    // recorder = new MediaRecorder(stream);
-    // let data = [];
-  
-    // recorder.ondataavailable = event => data.push(event.data);
-    // recorder.start();
-
     console.log('inside start recording , stream = ', stream.getTracks().length);
 
     let chunks = [];
