@@ -93,10 +93,14 @@ stopMicRecord.addEventListener('click',(event)=>{
     }
 })
 
-startRecord.addEventListener('click',(event)=>{
-    const destinationStream = getDestinationStream();
+startRecord.addEventListener('click',async (event)=>{
+    
+    const destinationVideoStream = await navigator.mediaDevices.getCurrentBrowsingContextMedia({video:true,audio:false})
+    
+
+    const destinationStream = await new MediaStream([...destinationVideoStream.getTracks(),...getDestinationStream().stream.getTracks()]) ;
     console.log('inside start record = ', destinationStream);
-    startRecording(destinationStream.stream);
+    startRecording(destinationStream);
 })
 
 stopRecord.addEventListener('click',(event)=>{
@@ -107,7 +111,9 @@ const startRecording = async (stream) => {
     console.log('inside start recording , stream = ', stream.getTracks().length);
 
     let chunks = [];
-    mediaRecorder = new MediaRecorder(stream);
+    //let options = {mimeType: 'audio/webm;codecs=opus'};
+    let options = {mimeType: 'video/webm; codecs=vp9'};
+    mediaRecorder = new MediaRecorder(stream,options);
 
     mediaRecorder.onerror = function (error) {
         console.log('error occuerd in recordign ', error);
@@ -126,18 +132,18 @@ const startRecording = async (stream) => {
     console.log('media recorder state = ', mediaRecorder.state);
 
     mediaRecorder.onstop = function (e) {
-        console.log(stream.getTracks().length);
+        stream.getVideoTracks().forEach(track => track.stop());
 
         console.log('inside mediarecorder onstop');
         
-         var recordedBlob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
-        //let recordedBlob = new Blob(chunks, { type: "audio/mp3" });
+         //var recordedBlob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
+        let recordedBlob = new Blob(chunks, { type: 'video/webm' });
         // console.log('blob ', blob);
 
         //let recordedBlob = new Blob(chunks, { type: "video/webm" });
         //recording.src = URL.createObjectURL(recordedBlob);
         downloadButton.href = URL.createObjectURL(recordedBlob);
-        downloadButton.download = "RecordedVideo.mp3";
+        downloadButton.download = "RecordedVideo.webm";
 
 
         //chunks = [];
