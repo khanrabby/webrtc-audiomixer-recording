@@ -95,10 +95,11 @@ stopMicRecord.addEventListener('click',(event)=>{
 
 startRecord.addEventListener('click',async (event)=>{
     
-    const destinationVideoStream = await navigator.mediaDevices.getCurrentBrowsingContextMedia({video:true,audio:false})
+    //const destinationVideoStream = await navigator.mediaDevices.getUserMedia({video:false,audio:true})
     
 
-    const destinationStream = await new MediaStream([...destinationVideoStream.getTracks(),...getDestinationStream().stream.getTracks()]) ;
+    //const destinationStream = await new MediaStream([...destinationVideoStream.getTracks(),...getDestinationStream().stream.getTracks()]) ;
+    const destinationStream = await new MediaStream([...getDestinationStream().stream.getTracks()]) ;
     console.log('inside start record = ', destinationStream);
     startRecording(destinationStream);
 })
