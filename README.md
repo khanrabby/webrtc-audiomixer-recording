@@ -11,10 +11,14 @@ To run the project and get the desired output described above , go through the f
 1. Clone the repo 
 
 2. Install all the dependencies by running 
+```
 npm install
+```
 
 3. Run the server by 
+```
 node server.js
+```
 
 4. Open browser and go to localhost:3000
 
