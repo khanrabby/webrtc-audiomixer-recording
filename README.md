@@ -34,3 +34,5 @@ node server.js
 9. When the recording is stopped, a "Download" button will appear to download the final recorded audio file.
 
 10. Click the "Download" button to download the recorded file , play the sound , you will get the audio mixed desired.  
+
+If you find the code samples helpful , give this repository a star. Thank you. 
