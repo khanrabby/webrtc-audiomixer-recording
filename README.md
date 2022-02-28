@@ -1,4 +1,5 @@
-# recording-test
+# webrtc-audiomixer-recording
+
 This repository contains code for following tasks
 1. Recording mic sound using webrtc media device.
 2. Playing a local sound using audioContext
